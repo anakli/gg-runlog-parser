@@ -27,6 +27,7 @@ T0 = data_points[0][0]
 
 for d in data_points:
     d[0] = d[0] - T0
+    d.append(sum(d))
 
 #print("\t".join(["#"] + headers))
 for i, d in enumerate(data_points):
