@@ -11,7 +11,8 @@ headers = []
 for logfile in os.listdir(datadir):
     path = os.path.join(datadir, logfile)
 
-    with open(logfile, "r") as log:
+    #with open(logfile, "r") as log:
+    with open(path, "r") as log:
         data = eval(log.read())
         point = [data['started']]
         point += [x[1] for x in data['timelog']]
