@@ -12,10 +12,10 @@ plt.style.use('default')
 plt.rcParams.update({'font.size': 20})
 plt.rcParams['errorbar.capsize'] = 2
 
-#python plot-per-lambda-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt videoAnalytics_split_video3res4_100batch1_10batch2_stage1_monitorafterS3_onlyEPHEMdata_rxstats.txt
+#python plot-per-lambda-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt videoAnalytics_split_video3res4_100batch1_20batch2_stage1_monitorafterS3_onlyEPHEMdata_rxstats.txt
 
 
-#latest: python plot-total-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_monitorafterS3_REDOGOOD_rxstats.txt
+#latest: python plot-total-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_monitorafterS3_REDOGOOD_rxstats.txt
 
 datadir = sys.argv[1]
 netstat_dir = os.path.join(datadir, "netstats")
@@ -269,10 +269,10 @@ sort = ax2.plot(x, np.transpose(ysum), label='Sort100GB-500workers', color='#2ca
 
 rxfilename = sys.argv[3]
 rxstats = open(rxfilename, 'r')
-#txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
-#txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_monitorafterS3_txstats.txt', 'r')
-txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_monitorafterS3_REDOGOOD_txstats.txt', 'r')
-#txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_monitorafterS3__txstats.txt', 'r')
+#txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
+#txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_monitorafterS3_txstats.txt', 'r')
+txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_monitorafterS3_REDOGOOD_txstats.txt', 'r')
+#txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_monitorafterS3__txstats.txt', 'r')
 #txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
 
 i = 0
@@ -331,9 +331,9 @@ BYTES_TO_BITS=8
 #ticks_y = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scale_y/100))
 #ax.yaxis.set_major_formatter(ticks_y)
 #sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-500workers', color='#ff7f0e', linewidth=3)
-#sort = ax3.plot(x, np.transpose(yavg), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3)
-sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3)
-ax3.set_xlim(0, 150)
+#sort = ax3.plot(x, np.transpose(yavg), label='video-analytics-62workers-310workers', color='#ff7f0e', linewidth=3)
+sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-310workers', color='#ff7f0e', linewidth=3)
+ax3.set_xlim(0, 50)
 #a32.set_ylim(0, 0.1)
 ax3.set_xlabel("Time (s)")
 #ax2.set_ylabel("Total GB/s per GB capacity")
@@ -398,14 +398,14 @@ BYTES_TO_BITS=8
 #ax.yaxis.set_major_formatter(ticks_y)
 #sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-500workers', color='#ff7f0e', linewidth=3)
 #sort = ax3.plot(x, np.transpose(yavg), label='video-analytics-500workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
-#sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
+#sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-310workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
 sort = ax3.plot(x, np.transpose(ysum), color='#ff7f0e', linewidth=3, linestyle='dashed')
 
 #------------ video analytics stage 2------
 
 
-rxfilename = 'videoAnalytics_split_video3res4_100batch1_10batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_rxstats.txt'
-txfilename = 'videoAnalytics_split_video3res4_100batch1_10batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_txstats.txt'
+rxfilename = 'videoAnalytics_split_video3res4_100batch1_20batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_rxstats.txt'
+txfilename = 'videoAnalytics_split_video3res4_100batch1_20batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_txstats.txt'
 rxstats = open(rxfilename, 'r')
 txstats = open(txfilename, 'r')
 
@@ -437,7 +437,7 @@ for line in rxstats: #rxstats:
 		ytotal = y
 
 
-DELAY_TIME =0; #30; #10	
+DELAY_TIME = 15; #10	
 x = range(0, xmax - xmin +1 + DELAY_TIME)
 ytotal = np.pad(ytotal, (DELAY_TIME,0), "constant" , constant_values=(0,0))
 #ycum = np.cumsum(ytotal, axis=0)
@@ -450,9 +450,9 @@ yavg = ysum/workers  #individual throughput/capacity
 
 scale_y = 1e9
 BYTES_TO_BITS=8
-#sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3)
+#sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-310workers', color='#ff7f0e', linewidth=3)
 sort = ax3.plot(x, np.transpose(ysum), color='#ff7f0e', linewidth=3)
-ax3.set_xlim(0, 120)
+ax3.set_xlim(0, 40)
 #ax3.set_ylim(0, 1.0)
 ax3.set_xlabel("Time (s)")
 ax3.legend(loc='upper right')
@@ -497,7 +497,7 @@ yavg = ysum/workers  #individual throughput/capacity
 
 scale_y = 1e9
 BYTES_TO_BITS=8
-sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
+sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-310workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
 
 
 #---- end video analytics stage2
@@ -506,7 +506,7 @@ rxstats.close()
 #plt.show()
 fig.text(0.05, 0.5, 'Total GB/s', ha='center', va='center', rotation='vertical')
 #fig.tight_layout()
-fig.savefig("throughput-per-lambda.pdf")
+fig.savefig("throughput-total-plot.pdf")
 plt.show()
 exit(0)
 
