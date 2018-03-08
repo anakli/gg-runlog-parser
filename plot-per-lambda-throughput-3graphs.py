@@ -12,7 +12,6 @@ plt.style.use('default')
 plt.rcParams.update({'font.size': 20})
 plt.rcParams['errorbar.capsize'] = 2
 
-# python plot-per-lambda-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt  video3-4k-b50-s3-rxstats.txt
 #python plot-per-lambda-throughput-3graphs.py gg-cmake-s3netstats-1000lambdas-REDO sort100GB-500worker-TXstats-CrailReFlex.txt videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata.txt
 
 datadir = sys.argv[1]
@@ -177,8 +176,11 @@ for line in rxstats:
 		ytotal = y
 		#ytotal = np.row_stack((np.zeros(DURATION+1),y))
 	
-x = range(0, xmax - xmin +1)
+MAP_TIME = 35
+x = range(0, xmax - xmin +1 + MAP_TIME)
 ycum = np.cumsum(ytotal, axis=0)
+ytotal = np.pad(ytotal, (MAP_TIME,0), "constant" , constant_values=(0,0))
+ycum = np.pad(ycum, (MAP_TIME,0), "constant" , constant_values=(0,0))
 workers = np.count_nonzero(ytotal, axis=0)
 workers[workers==0] = 1
 SORT_CAPACITY=100
@@ -200,7 +202,7 @@ sort = ax2.plot(x, np.transpose(yavg), label='Sort100GB-500workers', color='#2ca
 #ax2.set_xlim(0, 30)
 #ax2.set_ylim(0, 0.1)
 #ax2.set_ylim(0, 50)
-ax2.set_xlim(0, 60)
+ax2.set_xlim(0, 90)
 ax2.set_xlabel("Time (s)")
 #ax2.set_ylabel("Total GB/s per GB capacity")
 #ax.set_title("RX network utilization")
@@ -262,7 +264,8 @@ sort = ax2.plot(x, np.transpose(yavg), label='Sort100GB-500workers', color='#2ca
 
 rxfilename = sys.argv[3]
 rxstats = open(rxfilename, 'r')
-txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
+#txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
+txstats = open('videoAnalytics_split_video3res4_100batch1_10batch2_stage1_onlyEPHEMdata_monitorafterS3_txstats.txt', 'r')
 #txstats = open('videoAnalytics_split_video3res4_100batch1_20batch2_stage1_onlyEPHEMdata_txstats.txt', 'r')
 
 i = 0
@@ -329,6 +332,10 @@ ax3.legend(loc='upper left')
 
 
 
+i = 0
+xmax = 0
+xmin = 0
+ytotal = None
 for line in txstats: #rxstats:
 	data = np.loadtxt(StringIO(unicode(line)), delimiter='\t') 
 	start_time = int(data[1])
@@ -378,15 +385,109 @@ BYTES_TO_BITS=8
 #ticks_y = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scale_y/100))
 #ax.yaxis.set_major_formatter(ticks_y)
 #sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-500workers', color='#ff7f0e', linewidth=3)
-sort = ax3.plot(x, np.transpose(yavg), label='video-analytics-500workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
+sort = ax3.plot(x, np.transpose(yavg), color='#ff7f0e', linewidth=3, linestyle='dashed')
 
 
+rxfilename = 'videoAnalytics_split_video3res4_100batch1_10batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_rxstats.txt'
+txfilename = 'videoAnalytics_split_video3res4_100batch1_10batch2_stage2_onlyEPHEMdata_monitorafterS3_REDOGOOD_txstats.txt'
+rxstats = open(rxfilename, 'r')
+txstats = open(txfilename, 'r')
+
+i = 0
+xmax = 0
+xmin = 0
+ytotal = None
+DURATION = 200 #15
+for line in rxstats: #rxstats:
+	data = np.loadtxt(StringIO(unicode(line)), delimiter='\t') 
+	start_time = int(data[1])
+	if i == 0 :
+		xmin = start_time
+		xmax = xmin + DURATION
+	i += 1
+	x = np.array(range(start_time, start_time + len(data) - 2))
+	y = np.delete(data, [0,1])
+	if len(data) <= 2:
+	    continue
+	padzeros = x[0] - xmin
+	if padzeros > 0:
+		y = np.pad(y, (padzeros,0), "constant", constant_values=(0,0))
+	padend = xmax - x[-1]
+	if padend > 0:
+		y = np.pad(y, (0,padend), "constant" , constant_values=(0,0))
+	if ytotal is not None:
+		ytotal = np.row_stack((ytotal,y))
+	else:
+		ytotal = y
+
+
+DELAY_TIME =0; #30; #10	
+x = range(0, xmax - xmin +1 + DELAY_TIME)
+ytotal = np.pad(ytotal, (DELAY_TIME,0), "constant" , constant_values=(0,0))
+#ycum = np.cumsum(ytotal, axis=0)
+#ycum = np.pad(ycum, (LOAD_S3_TIME,0), "constant" , constant_values=(0,0))
+workers = np.count_nonzero(ytotal, axis=0)
+workers[workers==0] = 1
+VIDEO_CAPACITY=0.3
+ysum = np.sum(ytotal, axis=0) / scale_y #/ VIDEO_CAPACITY #cumulative throughput/capacity
+yavg = ysum/workers  #individual throughput/capacity
+
+scale_y = 1e6
+BYTES_TO_BITS=8
+#sort = ax3.plot(x, np.transpose(ysum), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3)
+sort = ax3.plot(x, np.transpose(yavg), color='#ff7f0e', linewidth=3)
+ax3.set_xlim(0, 120)
+#ax3.set_ylim(0, 1.0)
+ax3.set_xlabel("Time (s)")
+ax3.legend(loc='upper right')
+
+
+
+i = 0
+xmax = 0
+xmin = 0
+ytotal = None
+for line in txstats: #rxstats:
+	data = np.loadtxt(StringIO(unicode(line)), delimiter='\t') 
+	start_time = int(data[1])
+	if i == 0 :
+		xmin = start_time
+		xmax = xmin + DURATION
+	i += 1
+	x = np.array(range(start_time, start_time + len(data) - 2))
+	y = np.delete(data, [0,1])
+	if len(data) <= 2:
+	    continue
+	padzeros = x[0] - xmin
+	if padzeros > 0:
+		y = np.pad(y, (padzeros,0), "constant", constant_values=(0,0))
+	padend = xmax - x[-1]
+	if padend > 0:
+		y = np.pad(y, (0,padend), "constant" , constant_values=(0,0))
+	if ytotal is not None:
+		ytotal = np.row_stack((ytotal,y))
+	else:
+		ytotal = y
+
+
+	
+x = range(0, xmax - xmin +1 + DELAY_TIME)
+ytotal = np.pad(ytotal, (DELAY_TIME,0), "constant" , constant_values=(0,0))
+workers = np.count_nonzero(ytotal, axis=0)
+workers[workers==0] = 1
+VIDEO_CAPACITY=0.3
+ysum = np.sum(ytotal, axis=0) / scale_y #/ VIDEO_CAPACITY #cumulative throughput/capacity
+yavg = ysum/workers  #individual throughput/capacity
+
+scale_y = 1e6
+BYTES_TO_BITS=8
+sort = ax3.plot(x, np.transpose(yavg), label='video-analytics-62workers-620workers', color='#ff7f0e', linewidth=3, linestyle='dashed')
 
 rxstats.close()
 #plt.show()
 fig.text(0.05, 0.5, 'Avg. MB/s per Lambda', ha='center', va='center', rotation='vertical')
 #fig.tight_layout()
-fig.savefig("throughput-per-capacity.pdf")
+fig.savefig("throughput-per-lambda.pdf")
 plt.show()
 exit(0)
 
