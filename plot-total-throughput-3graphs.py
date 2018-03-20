@@ -207,7 +207,7 @@ sort = ax2.plot(x, np.transpose(ysum), label='Sort100GB-500workers', color='#2ca
 #ax2.set_ylim(0, 0.1)
 #ax2.set_ylim(0, 50)
 ax2.set_xlim(0, 90)
-ax2.set_xlabel("Time (s)")
+#ax2.set_xlabel("Time (s)")
 #ax2.set_ylabel("Total GB/s per GB capacity")
 #ax.set_title("RX network utilization")
 ax2.legend(loc='upper right')
@@ -552,7 +552,7 @@ ticks_y = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x*BYTES_TO_BITS/sca
 ax.yaxis.set_major_formatter(ticks_y)
 ax.plot(x, np.transpose(ycum))
 
-ax.set_xlabel("Time (s)")
+#ax.set_xlabel("Time (s)")
 ax.set_ylabel("Cumulative Gb/s")
 ax.set_title("TX network utilization")
 
